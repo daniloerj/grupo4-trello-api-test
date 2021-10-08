@@ -1,0 +1,1150 @@
+{
+	"info": {
+		"_postman_id": "2d3bff0d-4e93-4904-a967-ab172c520de1",
+		"name": "grupo4-api-trello",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "boards",
+			"item": [
+				{
+					"name": "b-create-board-lists",
+					"item": [
+						{
+							"name": "key-incorrecto",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"//riables.set(\"key\",\"dsafasdnsdfjdsajknfdjndfjknf\");"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"el key es incorrecto\",function(){",
+											"    pm.response.to.have.body(\"invalid key\");",
+											"    //pm.expect(pm.response.text()).to.include(\"inva\");",
+											"});",
+											"pm.test(\"el code es correcto\",function(){",
+											"    pm.expect(pm.response).to.have.property('code', 401);",
+											"});",
+											"pm.test(\"el code es correcto\",function(){",
+											"    pm.expect(pm.response).to.have.property('status', \"Unauthorized\");",
+											"});",
+											"",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/1/boards?name=prueba",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"1",
+										"boards"
+									],
+									"query": [
+										{
+											"key": "name",
+											"value": "prueba"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "secret-key-incorrecto",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"//pm.variables.set(\"secret-key\",\"\");"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"el key es incorrecto\",function(){",
+											"    pm.response.to.have.body(\"invalid key\");",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/1/boards?name=prueba",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"1",
+										"boards"
+									],
+									"query": [
+										{
+											"key": "name",
+											"value": "prueba"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "token-incorrecto",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"//pm.variables.set(\"token\",\"fsdfsdfafsdafsdafasd\");"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"el token es incorrecto\",function(){",
+											"    pm.response.to.have.body(\"invalid token\");",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/1/boards?name=prueba",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"1",
+										"boards"
+									],
+									"query": [
+										{
+											"key": "name",
+											"value": "prueba"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "create-board",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"//este codigo se ejecuta antes que se llame al endpoint",
+											"//significa que en este momento no tengo el id del tablero creado",
+											"//entoncrs pcomo no tengo el id no puedo manipularlo",
+											";",
+											"",
+											"",
+											"",
+											"pm.sendRequest(utilitarios.createPath(\"users\",\"5\"), function (error, response) {",
+											"            console.log(response.json());",
+											"",
+											"             pm.test('se llamo satisfactoriamente al api externa', function() {",
+											"        pm.expect(error).to.equal(null);",
+											"        pm.expect(response).to.have.property('code', 200);",
+											"        pm.expect(response).to.have.property('status', 'OK');",
+											"        console.log(utilitarios.getResource(response.text()));",
+											"  });",
+											"        });"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"",
+											"var objetoRespuesta = pm.response.json();",
+											"var statusCode = pm.variables.get(\"statusCode\");",
+											"",
+											"pm.test(\"el codigo de estado es \"+statusCode,function(){",
+											"    ",
+											"    pm.response.to.have.status(parseInt(statusCode));",
+											"    //pm.response.to.have.status(\"OK\");",
+											"});",
+											"",
+											"",
+											"pm.test.skip(\"el header group existe\" ,function(){",
+											"    pm.response.to.have.header(\"x-group\");",
+											"}",
+											");",
+											"",
+											"pm.test(\"el header Content-Type existe y su valor es json\" ,function(){",
+											"    pm.response.to.have.header(\"Content-Type\",\"application/json; charset=utf-8\");",
+											"}",
+											");",
+											"",
+											"pm.test(\"el nombre del tablero es correcto\",function(){",
+											"    pm.expect(pm.variables.get(\"boardName\")).to.equal(objetoRespuesta.name);",
+											"});",
+											"",
+											"pm.test(\"la respuesta cumple con el formato\",function(){",
+											"    var schema = {",
+											"    \"type\": \"object\",",
+											"    \"additionalProperties\":false,",
+											"    \"required\": [",
+											"        \"id\",",
+											"        \"name\",",
+											"        \"desc\",",
+											"        \"descData\",",
+											"        \"closed\",",
+											"        \"idOrganization\",",
+											"        \"idEnterprise\",",
+											"        \"pinned\",",
+											"        \"url\",",
+											"        \"shortUrl\",",
+											"        \"prefs\",",
+											"        \"labelNames\",",
+											"        \"limits\"",
+											"    ],",
+											"    \"properties\": {",
+											"        \"id\": {",
+											"            \"type\": \"string\"",
+											"        },",
+											"        \"name\": {",
+											"            \"type\": \"string\"",
+											"        },",
+											"        \"desc\": {",
+											"            \"type\": \"string\"",
+											"        },",
+											"        \"descData\": {",
+											"            \"type\": \"null\"",
+											"        },",
+											"        \"closed\": {",
+											"            \"type\": \"boolean\"",
+											"        },",
+											"        \"idOrganization\": {",
+											"            \"type\": \"string\"",
+											"        },",
+											"        \"idEnterprise\": {",
+											"            \"type\": \"null\"",
+											"        },",
+											"        \"pinned\": {",
+											"            \"type\": \"boolean\"",
+											"        },",
+											"        \"limits\": {",
+											"            \"type\": \"object\"",
+											"        },",
+											"        \"url\": {",
+											"            \"type\": \"string\"",
+											"        },",
+											"        \"shortUrl\": {",
+											"            \"type\": \"string\"",
+											"        },",
+											"        \"prefs\": {",
+											"            \"type\": \"object\",",
+											"            \"additionalProperties\":false,",
+											"            \"required\": [",
+											"                \"permissionLevel\",",
+											"                \"hideVotes\",",
+											"                \"voting\",",
+											"                \"comments\",",
+											"                \"invitations\",",
+											"                \"selfJoin\",",
+											"                \"cardCovers\",",
+											"                \"isTemplate\",",
+											"                \"cardAging\",",
+											"                \"calendarFeedEnabled\",",
+											"                \"background\",",
+											"                \"backgroundImage\",",
+											"                \"backgroundImageScaled\",",
+											"                \"backgroundTile\",",
+											"                \"backgroundBrightness\",",
+											"                \"backgroundColor\",",
+											"                \"backgroundBottomColor\",",
+											"                \"backgroundTopColor\",",
+											"                \"canBePublic\",",
+											"                \"canBeEnterprise\",",
+											"                \"canBeOrg\",",
+											"                \"canBePrivate\",",
+											"                \"canInvite\"",
+											"            ],",
+											"            \"properties\": {",
+											"                \"permissionLevel\": {",
+											"                    \"type\": \"string\"",
+											"                },",
+											"                \"hideVotes\": {",
+											"                    \"type\": \"boolean\"",
+											"                },",
+											"                \"voting\": {",
+											"                    \"type\": \"string\"",
+											"                },",
+											"                \"comments\": {",
+											"                    \"type\": \"string\"",
+											"                },",
+											"                \"invitations\": {",
+											"                    \"type\": \"string\"",
+											"                },",
+											"                \"selfJoin\": {",
+											"                    \"type\": \"boolean\"",
+											"                },",
+											"                \"cardCovers\": {",
+											"                    \"type\": \"boolean\"",
+											"                },",
+											"                \"isTemplate\": {",
+											"                    \"type\": \"boolean\"",
+											"                },",
+											"                \"cardAging\": {",
+											"                    \"type\": \"string\"",
+											"                },",
+											"                \"calendarFeedEnabled\": {",
+											"                    \"type\": \"boolean\"",
+											"                },",
+											"                \"background\": {",
+											"                    \"type\": \"string\"",
+											"                },",
+											"                \"backgroundImage\": {",
+											"                    \"type\": \"null\"",
+											"                },",
+											"                \"backgroundImageScaled\": {",
+											"                    \"type\": \"null\"",
+											"                },",
+											"                \"backgroundTile\": {",
+											"                    \"type\": \"boolean\"",
+											"                },",
+											"                \"backgroundBrightness\": {",
+											"                    \"type\": \"string\"",
+											"                },",
+											"                \"backgroundColor\": {",
+											"                    \"type\": \"string\"",
+											"                },",
+											"                \"backgroundBottomColor\": {",
+											"                    \"type\": \"string\"",
+											"                },",
+											"                \"backgroundTopColor\": {",
+											"                    \"type\": \"string\"",
+											"                },",
+											"                \"canBePublic\": {",
+											"                    \"type\": \"boolean\"",
+											"                },",
+											"                \"canBeEnterprise\": {",
+											"                    \"type\": \"boolean\"",
+											"                },",
+											"                \"canBeOrg\": {",
+											"                    \"type\": \"boolean\"",
+											"                },",
+											"                \"canBePrivate\": {",
+											"                    \"type\": \"boolean\"",
+											"                },",
+											"                \"canInvite\": {",
+											"                    \"type\": \"boolean\"",
+											"                }",
+											"            }",
+											"        },",
+											"        \"labelNames\": {",
+											"            \"type\": \"object\",",
+											"            \"additionalProperties\":false,",
+											"            \"required\": [",
+											"                \"green\",",
+											"                \"yellow\",",
+											"                \"orange\",",
+											"                \"red\",",
+											"                \"purple\",",
+											"                \"blue\",",
+											"                \"sky\",",
+											"                \"lime\",",
+											"                \"pink\",",
+											"                \"black\"",
+											"            ],",
+											"            \"properties\": {",
+											"                \"green\": {",
+											"                    \"type\": \"string\"",
+											"                },",
+											"                \"yellow\": {",
+											"                    \"type\": \"string\"",
+											"                },",
+											"                \"orange\": {",
+											"                    \"type\": \"string\"",
+											"                },",
+											"                \"red\": {",
+											"                    \"type\": \"string\"",
+											"                },",
+											"                \"purple\": {",
+											"                    \"type\": \"string\"",
+											"                },",
+											"                \"blue\": {",
+											"                    \"type\": \"string\"",
+											"                },",
+											"                \"sky\": {",
+											"                    \"type\": \"string\"",
+											"                },",
+											"                \"lime\": {",
+											"                    \"type\": \"string\"",
+											"                },",
+											"                \"pink\": {",
+											"                    \"type\": \"string\"",
+											"                },",
+											"                \"black\": {",
+											"                    \"type\": \"string\"",
+											"                }",
+											"            }",
+											"        }",
+											"    }",
+											"};",
+											"    pm.response.to.have.jsonSchema(schema);",
+											"});",
+											"",
+											"",
+											"",
+											"//este codigo se ejecuta despues que se llamo al endpoint",
+											"// por ende en este codigo yo puedo manipular los datos de la respuesta del request asi como los headers de respuesta",
+											"// asi como las coockies de respuesta",
+											"",
+											"",
+											"// Example with a full-fledged request",
+											"var deleteRequest = {",
+											"  url: pm.variables.get(\"url\")+'/1/boards/'+objetoRespuesta.id+'?key='+pm.environment.get(\"key\")+'&token='+pm.environment.get(\"token\"),",
+											"  method: 'DELETE'",
+											"};",
+											"",
+											"",
+											"pm.sendRequest(deleteRequest, function(error,response){",
+											"",
+											"    var objetoRespuesta = response.json();",
+											"",
+											"    pm.test('se elimino el tablero', function() {",
+											"        pm.expect(error).to.equal(null);",
+											"        pm.expect(objetoRespuesta._value).to.eql(null);",
+											"        pm.expect(objetoRespuesta._value).to.be.null;",
+											"        //pm.expect(response).to.have.property('code', 200);",
+											"        //pm.expect(response).to.have.property('status', 'OK');",
+											"    });",
+											"});",
+											"",
+											"",
+											"",
+											"",
+											"",
+											"",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\":\"{{boardName}}\",\n    \"defaultLists\":{{defaultLists}}\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/1/boards",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"1",
+										"boards"
+									],
+									"query": [
+										{
+											"key": "name",
+											"value": "grupo4-from-postman",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "b-get-lists-on-board",
+					"item": [
+						{
+							"name": "create-board",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"//este codigo se ejecuta antes que se llame al endpoint",
+											"//significa que en este momento no tengo el id del tablero creado",
+											"//entoncrs pcomo no tengo el id no puedo manipularlo",
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"",
+											"var objetoRespuesta = pm.response.json();",
+											"pm.test(\"el codigo de estado es 200 y el mensaje es OK\",function(){",
+											"    pm.response.to.have.status(200);",
+											"    pm.response.to.have.status(\"OK\");",
+											"});",
+											"",
+											"pm.test(\"el tiempo de respuesta es menor a 3 segundos\",function(){",
+											"    pm.expect(pm.response.responseTime).to.below(3000);",
+											"});",
+											"",
+											"pm.test(\"el header Content-Type existe y su valor es json\" ,function(){",
+											"    pm.response.to.have.header(\"Content-Type\",\"application/json; charset=utf-8\");",
+											"}",
+											");",
+											"",
+											"pm.test(\"el nombre del tablero es correcto\",function(){",
+											"    pm.expect(\"grupo4-from-postman-body\").to.equal(objetoRespuesta.name);",
+											"});",
+											"",
+											"pm.test(\"la respuesta cumple con el formato\",function(){",
+											"    var schema = {",
+											"    \"type\": \"object\",",
+											"    \"additionalProperties\":false,",
+											"    \"required\": [",
+											"        \"id\",",
+											"        \"name\",",
+											"        \"desc\",",
+											"        \"descData\",",
+											"        \"closed\",",
+											"        \"idOrganization\",",
+											"        \"idEnterprise\",",
+											"        \"pinned\",",
+											"        \"url\",",
+											"        \"shortUrl\",",
+											"        \"prefs\",",
+											"        \"labelNames\",",
+											"        \"limits\"",
+											"    ],",
+											"    \"properties\": {",
+											"        \"id\": {",
+											"            \"type\": \"string\"",
+											"        },",
+											"        \"name\": {",
+											"            \"type\": \"string\"",
+											"        },",
+											"        \"desc\": {",
+											"            \"type\": \"string\"",
+											"        },",
+											"        \"descData\": {",
+											"            \"type\": \"null\"",
+											"        },",
+											"        \"closed\": {",
+											"            \"type\": \"boolean\"",
+											"        },",
+											"        \"idOrganization\": {",
+											"            \"type\": \"string\"",
+											"        },",
+											"        \"idEnterprise\": {",
+											"            \"type\": \"null\"",
+											"        },",
+											"        \"pinned\": {",
+											"            \"type\": \"boolean\"",
+											"        },",
+											"        \"limits\": {",
+											"            \"type\": \"object\"",
+											"        },",
+											"        \"url\": {",
+											"            \"type\": \"string\"",
+											"        },",
+											"        \"shortUrl\": {",
+											"            \"type\": \"string\"",
+											"        },",
+											"        \"prefs\": {",
+											"            \"type\": \"object\",",
+											"            \"additionalProperties\":false,",
+											"            \"required\": [",
+											"                \"permissionLevel\",",
+											"                \"hideVotes\",",
+											"                \"voting\",",
+											"                \"comments\",",
+											"                \"invitations\",",
+											"                \"selfJoin\",",
+											"                \"cardCovers\",",
+											"                \"isTemplate\",",
+											"                \"cardAging\",",
+											"                \"calendarFeedEnabled\",",
+											"                \"background\",",
+											"                \"backgroundImage\",",
+											"                \"backgroundImageScaled\",",
+											"                \"backgroundTile\",",
+											"                \"backgroundBrightness\",",
+											"                \"backgroundColor\",",
+											"                \"backgroundBottomColor\",",
+											"                \"backgroundTopColor\",",
+											"                \"canBePublic\",",
+											"                \"canBeEnterprise\",",
+											"                \"canBeOrg\",",
+											"                \"canBePrivate\",",
+											"                \"canInvite\"",
+											"            ],",
+											"            \"properties\": {",
+											"                \"permissionLevel\": {",
+											"                    \"type\": \"string\"",
+											"                },",
+											"                \"hideVotes\": {",
+											"                    \"type\": \"boolean\"",
+											"                },",
+											"                \"voting\": {",
+											"                    \"type\": \"string\"",
+											"                },",
+											"                \"comments\": {",
+											"                    \"type\": \"string\"",
+											"                },",
+											"                \"invitations\": {",
+											"                    \"type\": \"string\"",
+											"                },",
+											"                \"selfJoin\": {",
+											"                    \"type\": \"boolean\"",
+											"                },",
+											"                \"cardCovers\": {",
+											"                    \"type\": \"boolean\"",
+											"                },",
+											"                \"isTemplate\": {",
+											"                    \"type\": \"boolean\"",
+											"                },",
+											"                \"cardAging\": {",
+											"                    \"type\": \"string\"",
+											"                },",
+											"                \"calendarFeedEnabled\": {",
+											"                    \"type\": \"boolean\"",
+											"                },",
+											"                \"background\": {",
+											"                    \"type\": \"string\"",
+											"                },",
+											"                \"backgroundImage\": {",
+											"                    \"type\": \"null\"",
+											"                },",
+											"                \"backgroundImageScaled\": {",
+											"                    \"type\": \"null\"",
+											"                },",
+											"                \"backgroundTile\": {",
+											"                    \"type\": \"boolean\"",
+											"                },",
+											"                \"backgroundBrightness\": {",
+											"                    \"type\": \"string\"",
+											"                },",
+											"                \"backgroundColor\": {",
+											"                    \"type\": \"string\"",
+											"                },",
+											"                \"backgroundBottomColor\": {",
+											"                    \"type\": \"string\"",
+											"                },",
+											"                \"backgroundTopColor\": {",
+											"                    \"type\": \"string\"",
+											"                },",
+											"                \"canBePublic\": {",
+											"                    \"type\": \"boolean\"",
+											"                },",
+											"                \"canBeEnterprise\": {",
+											"                    \"type\": \"boolean\"",
+											"                },",
+											"                \"canBeOrg\": {",
+											"                    \"type\": \"boolean\"",
+											"                },",
+											"                \"canBePrivate\": {",
+											"                    \"type\": \"boolean\"",
+											"                },",
+											"                \"canInvite\": {",
+											"                    \"type\": \"boolean\"",
+											"                }",
+											"            }",
+											"        },",
+											"        \"labelNames\": {",
+											"            \"type\": \"object\",",
+											"            \"additionalProperties\":false,",
+											"            \"required\": [",
+											"                \"green\",",
+											"                \"yellow\",",
+											"                \"orange\",",
+											"                \"red\",",
+											"                \"purple\",",
+											"                \"blue\",",
+											"                \"sky\",",
+											"                \"lime\",",
+											"                \"pink\",",
+											"                \"black\"",
+											"            ],",
+											"            \"properties\": {",
+											"                \"green\": {",
+											"                    \"type\": \"string\"",
+											"                },",
+											"                \"yellow\": {",
+											"                    \"type\": \"string\"",
+											"                },",
+											"                \"orange\": {",
+											"                    \"type\": \"string\"",
+											"                },",
+											"                \"red\": {",
+											"                    \"type\": \"string\"",
+											"                },",
+											"                \"purple\": {",
+											"                    \"type\": \"string\"",
+											"                },",
+											"                \"blue\": {",
+											"                    \"type\": \"string\"",
+											"                },",
+											"                \"sky\": {",
+											"                    \"type\": \"string\"",
+											"                },",
+											"                \"lime\": {",
+											"                    \"type\": \"string\"",
+											"                },",
+											"                \"pink\": {",
+											"                    \"type\": \"string\"",
+											"                },",
+											"                \"black\": {",
+											"                    \"type\": \"string\"",
+											"                }",
+											"            }",
+											"        }",
+											"    }",
+											"};",
+											"    pm.response.to.have.jsonSchema(schema);",
+											"});",
+											"",
+											"",
+											"",
+											"",
+											"",
+											"",
+											"",
+											"",
+											"",
+											"",
+											"",
+											"",
+											"",
+											"",
+											"",
+											"",
+											"",
+											"",
+											"",
+											"",
+											"",
+											"",
+											"",
+											"",
+											"",
+											"",
+											"",
+											"//este codigo se ejecuta despues que se llamo al endpoint",
+											"// por ende en este codigo yo puedo manipular los datos de la respuesta del request asi como los headers de respuesta",
+											"// asi como las coockies de respuesta",
+											"pm.collectionVariables.set(\"idBoard\",objetoRespuesta.id);",
+											"",
+											"/*",
+											"// Example with a full-fledged request",
+											"var deleteRequest = {",
+											"  url: 'https://trello.com/1/boards/'+objetoRespuesta.id,",
+											"  method: 'DELETE'",
+											"};",
+											"",
+											"",
+											"pm.sendRequest(deleteRequest, function(error,response){",
+											"    pm.test('se elimino el tablero', function() {",
+											"        pm.expect(error).to.equal(null);",
+											"        //pm.expect(response).to.have.property('code', 200);",
+											"        //pm.expect(response).to.have.property('status', 'OK');",
+											"    });",
+											"});",
+											"*/",
+											"",
+											"",
+											"",
+											"",
+											"",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\":\"grupo4-from-postman-body\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/1/boards",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"1",
+										"boards"
+									],
+									"query": [
+										{
+											"key": "name",
+											"value": "grupo4-from-postman",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get-lists-on-board",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"el schema es correcto\",function(){",
+											"    var schema = {",
+											"    \"type\": \"array\",",
+											"    \"additionalItems\": true,",
+											"    \"minItems\":1,",
+											"    \"maxItems\":10,",
+											"    \"items\": {",
+											"        \"anyOf\": [",
+											"            {",
+											"                \"type\": \"object\",",
+											"                \"required\": [",
+											"                    \"id\",",
+											"                    \"name\",",
+											"                    \"closed\",",
+											"                    \"pos\",",
+											"                    \"softLimit\",",
+											"                    \"idBoard\",",
+											"                    \"subscribed\"",
+											"                ],",
+											"                \"properties\": {",
+											"                    \"id\": {",
+											"                        \"type\": \"string\"",
+											"                    },",
+											"                    \"name\": {",
+											"                        \"type\": \"string\"",
+											"                    },",
+											"                    \"closed\": {",
+											"                        \"type\": \"boolean\"",
+											"                    },",
+											"                    \"pos\": {",
+											"                        \"type\": \"number\"",
+											"                    },",
+											"                    \"softLimit\": {",
+											"                        \"type\": \"null\"",
+											"                    },",
+											"                    \"idBoard\": {",
+											"                        \"type\": \"string\"",
+											"                    },",
+											"                    \"subscribed\": {",
+											"                        \"type\": \"boolean\"",
+											"                    }",
+											"                },",
+											"                \"additionalProperties\": false",
+											"            }",
+											"        ]",
+											"    }",
+											"};",
+											"    pm.response.to.have.jsonSchema(schema);",
+											"});",
+											"",
+											"//obtener el id de un elemento del arreglo respuesta",
+											"var objetoRespuesta = pm.response.json();",
+											"var listaBuscar=\"En proceso\";",
+											"var idListaEncontrado= objetoRespuesta.find(e=>e.name===listaBuscar && e.closed != true);",
+											"/*",
+											"for(var i=0; i<objetoRespuesta.length;i++){",
+											"    if(listaBuscar === objetoRespuesta[i].name ){",
+											"        idListaEncontrado = objetoRespuesta[i].id;",
+											"        break;",
+											"    }",
+											"}*/",
+											"",
+											"console.warn(`el id encontrado es ${idListaEncontrado.id}`)",
+											"",
+											"",
+											"",
+											"",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/1/boards/{{idBoard}}/lists",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"1",
+										"boards",
+										"{{idBoard}}",
+										"lists"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete-board",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var objectoRespuesta = pm.response.json();",
+											"",
+											"pm.test(\"la respuesta es correcta\", function(){",
+											"    pm.expect(objectoRespuesta._value).to.eql(null);",
+											"});",
+											"",
+											"pm.test(\"el formato de respuesta es correcto\", function(){",
+											"    pm.expect(objectoRespuesta._value).to.be.null;",
+											"    pm.expect(objectoRespuesta._value).not.to.be.undefined;",
+											"});",
+											"",
+											"",
+											"",
+											"",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/1/boards/{{idBoard}}",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"1",
+										"boards",
+										"{{idBoard}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"el tiempo de respuesta es menor a 5 segundos\",function(){",
+							"    pm.expect(pm.response.responseTime).to.below(3000);",
+							"});"
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "lists",
+			"item": [
+				{
+					"name": "New Request",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://jsonplaceholder.typicode.com/albums",
+							"protocol": "http",
+							"host": [
+								"jsonplaceholder",
+								"typicode",
+								"com"
+							],
+							"path": [
+								"albums"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"el tiempo de respuesta es menor a 8 segundos\",function(){",
+							"    pm.expect(pm.response.responseTime).to.below(3000);",
+							"});"
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "cards",
+			"item": []
+		}
+	],
+	"auth": {
+		"type": "oauth1",
+		"oauth1": [
+			{
+				"key": "consumerSecret",
+				"value": "{{secret-key}}",
+				"type": "string"
+			},
+			{
+				"key": "token",
+				"value": "{{token}}",
+				"type": "string"
+			},
+			{
+				"key": "consumerKey",
+				"value": "{{key}}",
+				"type": "string"
+			},
+			{
+				"key": "signatureMethod",
+				"value": "HMAC-SHA1",
+				"type": "string"
+			},
+			{
+				"key": "version",
+				"value": "1.0",
+				"type": "string"
+			},
+			{
+				"key": "addParamsToHeader",
+				"value": false,
+				"type": "boolean"
+			},
+			{
+				"key": "addEmptyParamsToSign",
+				"value": false,
+				"type": "boolean"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"utilitarios = {",
+					"    autor:\"Postman\",",
+					"    createPath: function(resource,id){",
+					"        return `https://jsonplaceholder.typicode.com/${resource}/${id}`",
+					"    },",
+					"    getResource: function(path){",
+					"        return path.substring(4,9);",
+					"    }",
+					"}",
+					"",
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "autor",
+			"value": "danilo-efrain"
+		},
+		{
+			"key": "idBoard",
+			"value": "61317a659e76a58edd78c54e"
+		},
+		{
+			"key": "url",
+			"value": "https://trello.com"
+		},
+		{
+			"key": "boardName",
+			"value": "grupo"
+		},
+		{
+			"key": "defaultLists",
+			"value": "true"
+		},
+		{
+			"key": "statusCode",
+			"value": "200"
+		}
+	]
+}
